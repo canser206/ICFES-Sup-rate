@@ -1,0 +1,772 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap');
+
+:root {
+    --primary-color: #0066ff;
+    --secondary-color: #4a00e0;
+    --accent-color: #00d9ff;
+    --background-start: rgba(0, 102, 255, 0.8);
+    --background-end: rgba(74, 0, 224, 0.9);
+    --text-color: #ffffff;
+    --text-dark: #333333;
+    --input-border: #4a00e0;
+    --form-bg: rgba(255, 255, 255, 0.1);
+    --button-color: #4a00e0;
+    --button-hover: #3600a8;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --card-bg: rgba(255, 255, 255, 0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 20, 50, 0.7)), url('https://cdnjs.cloudflare.com/ajax/libs/pexels-images/1500/pexels-photo-1525041.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--text-color);
+    animation: fadeInBackground 1.5s ease-in-out;
+    overflow-x: hidden;
+}
+
+/* Logo y cabecera */
+.logo-header {
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.logo-icon {
+    margin-right: 10px;
+    font-size: 2rem;
+    color: var(--primary-color);
+    animation: pulse 2s infinite;
+}
+
+.page-container {
+    perspective: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 3rem 2rem;
+    flex: 1;
+}
+
+.container {
+    width: 420px;
+    background: linear-gradient(135deg, var(--background-start), var(--background-end));
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: formAppear 1s ease-in-out;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    transform: rotate(45deg);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.container:hover {
+    transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.form-header {
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.form-header h2 {
+    font-size: 2.4em;
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to right, #ffffff, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.form-subtitle {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.progress-indicator {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    margin: 15px auto 0;
+    overflow: hidden;
+    width: 80%;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 33%;
+    background: linear-gradient(90deg, var(--accent-color), #ffffff);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* ICFES Stats */
+.icfes-info {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 10px;
+    background: var(--card-bg);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+}
+
+.icfes-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-shadow: 0 2px 10px rgba(0, 217, 255, 0.5);
+}
+
+.stat-text {
+    font-size: 0.8em;
+    opacity: 0.9;
+}
+
+/* Form Elements */
+.input-group {
+    position: relative;
+    margin: 35px 0;
+    z-index: 1;
+}
+
+.input-group select,
+.input-group input {
+    width: 100%;
+    padding: 18px 15px 18px 45px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.input-group select {
+    appearance: none;
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+.input-group select:focus,
+.input-group input:focus {
+    border-color: var(--input-border);
+    background: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.input-group label {
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-group select:focus + label,
+.input-group select:valid + label,
+.input-group input:focus + label,
+.input-group input:valid + label {
+    top: -12px;
+    left: 15px;
+    font-size: 12px;
+    padding: 2px 8px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 18px;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.input-group select:focus ~ .input-icon,
+.input-group input:focus ~ .input-icon {
+    color: var(--primary-color);
+}
+
+.input-validation {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.button-container {
+    margin-top: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    position: relative;
+    background: var(--button-color);
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.7s ease;
+}
+
+.btn-text {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-icon {
+    position: absolute;
+    right: -40px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    z-index: 2;
+}
+
+.submit-btn:hover {
+    background: var(--button-hover);
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:hover .btn-text {
+    transform: translateX(-15px);
+}
+
+.submit-btn:hover .btn-icon {
+    right: 20px;
+    opacity: 1;
+}
+
+.submit-btn:active {
+    transform: scale(0.95);
+}
+
+/* Notification */
+.notification {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.success {
+    background: rgba(76, 175, 80, 0.2);
+    border-left: 4px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.notification.error {
+    background: rgba(244, 67, 54, 0.2);
+    border-left: 4px solid var(--error-color);
+    color: var(--error-color);
+}
+
+/* Beneficios */
+.icfes-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.icfes-benefits h4 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92em;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+}
+
+.benefit-item:hover {
+    transform: translateX(5px);
+}
+
+.benefit-item i {
+    color: var(--accent-color);
+    font-size: 1.1em;
+}
+
+.form-footer {
+    margin-top: 30px;
+    font-size: 0.95em;
+    position: relative;
+    z-index: 1;
+}
+
+.form-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+/* ICFES Info Card */
+.icfes-info-card {
+    width: 380px;
+    background: linear-gradient(135deg, rgba(74, 0, 224, 0.7), rgba(0, 102, 255, 0.7));
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: cardAppear 1.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.icfes-info-card:hover {
+    transform: translateY(-5px) rotateY(-5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.icfes-info-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    transform: rotate(-45deg);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.icfes-info-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--accent-color);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.icfes-info-card p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-size: 0.95em;
+    position: relative;
+    z-index: 1;
+}
+
+.icfes-info-card h4 {
+    margin-bottom: 15px;
+    margin-top: 25px;
+    font-size: 1.2em;
+    position: relative;
+    z-index: 1;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icfes-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 15px;
+}
+
+.area-tag {
+    background: var(--card-bg);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.area-tag i {
+    color: var(--accent-color);
+    font-size: 0.9em;
+}
+
+.area-tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Testimonial */
+.icfes-testimonial {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 25px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.icfes-testimonial i {
+    font-size: 1.5em;
+    color: var(--accent-color);
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.icfes-testimonial p {
+    font-style: italic;
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.icfes-testimonial span {
+    display: block;
+    text-align: right;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* Footer */
+.page-footer {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 40px 20px 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.footer-section h4 {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-section h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+.footer-section p {
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    opacity: 0.8;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 5px 0;
+}
+
+.footer-section ul li a:hover {
+    opacity: 1;
+    color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+    background: var(--primary-color);
+    transform: translateY(-5px);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+/* Animations */
+@keyframes formAppear {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateX(50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 0 5px rgba(0, 217, 255, 0.5); }
+    to { text-shadow: 0 0 15px rgba(0, 217, 255, 0.8), 0 0 30px rgba(0, 217, 255, 0.6); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .page-container {
+        flex-direction: column;
+        padding: 2rem 1rem;
+    }
+    
+    .icfes-info-card {
+        width: 100%;
+        max-width: 420px;
+    }
+}
+
+@media (max-width: 500px) {
+    .container,
+    .icfes-info-card {
+        width: 95%;
+        padding: 30px 20px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.8em;
+    }
+    
+    .input-group input {
+        padding: 14px 12px 14px 40px;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+}
