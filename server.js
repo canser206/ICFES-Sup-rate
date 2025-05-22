@@ -114,7 +114,7 @@ app.post('/register', (req, res) => {
     }
     
     // Verificar si el usuario o email ya existen
-    db.query('SELECT * FROM usuarios WHERE username = ? OR email = ?', [username, email], (err, results) => {
+    db.query('SELECT * FROM usuarios WHERE username = $1 OR email = $2', [username, email], (err, results) => {
         if (err) {
             console.error("Error SQL al verificar duplicados:", err);
             return res.status(500).json({ message: "❌ Error al verificar usuario" });
@@ -134,7 +134,7 @@ app.post('/register', (req, res) => {
         }
         
         // Si pasó todas las validaciones, registrar usuario
-        const sql = 'INSERT INTO usuarios (username, email, password, rol) VALUES (?, ?, ?, ?)';
+        const sql = 'INSERT INTO usuarios (username, email, password, rol) VALUES ($1, $2, $3, $4)';
         db.query(sql, [username, email, password, rol], (err, result) => {
             if (err) {
                 console.error("Error SQL al insertar:", err);
@@ -160,7 +160,7 @@ app.post('/login', (req, res) => {
     }
     
     // Consulta que busca por nombre de usuario O por email
-    const sql = 'SELECT * FROM usuarios WHERE (username = ? OR email = ?) AND password = ?';
+    const sql = 'SELECT * FROM usuarios WHERE (username = $1 OR email = $1) AND password = $2';
     db.query(sql, [username, username, password], (err, result) => {
         if (err) {
             console.error("Error SQL en login:", err);
@@ -212,7 +212,7 @@ app.get('/api/usuarios', (req, res) => {
         const total = countResult[0].total;
         const totalPages = Math.ceil(total / limit);
         
-        db.query('SELECT id, username, email, rol, created_at FROM usuarios LIMIT ? OFFSET ?', 
+        db.query('SELECT id, username, email, rol, created_at FROM usuarios LIMIT $1 OFFSET $2', 
             [limit, offset], 
             (err, results) => {
                 if (err) {
