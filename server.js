@@ -26,22 +26,22 @@ app.use(cors({
 
 app.use(express.static('public')); // Para servir archivos estáticos
 
-// Conexión a MySQL
-const db = mysql.createConnection({
+const { Client } = require('pg');
+
+const db = new Client({
     host: 'dpg-d0nmfsumcj7s73e5kmlg-a',
     port: '5432'|| 3306,
     user: 'icfes_sup_user',
     password: 'Venhpu9Fr72vY5MkFQ3z4TIh6UfLamdS',
-    database: 'icfes_sup'
+    database: 'icfes_sup',
+ssl: {
+    rejectUnauthorized: false  // Necesario para Render
+  }
 });
 
-db.connect(err => {
-    if (err) {
-        console.error('❌ Error conectando a la base de datos:', err);
-        return;
-    }
-    console.log('✅ Conectado a la base de datos');
-});
+db.connect()
+  .then(() => console.log('✅ Conectado a PostgreSQL'))
+  .catch(err => console.error('❌ Error conectando a PostgreSQL:', err));
 
 // Middleware para loguear todas las peticiones (ayuda al debuggear con ngrok)
 app.use((req, res, next) => {
