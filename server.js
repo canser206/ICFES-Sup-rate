@@ -1,6 +1,5 @@
 
 const express = require('express'); 
-const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -30,7 +29,7 @@ const { Client } = require('pg');
 
 const db = new Client({
     host: 'dpg-d0nmfsumcj7s73e5kmlg-a.oregon-postgres.render.com',
-    port: '5432'|| 3306,
+    port: '5432',
     user: 'icfes_sup_user',
     password: 'Venhpu9Fr72vY5MkFQ3z4TIh6UfLamdS',
     database: 'icfes_sup',
