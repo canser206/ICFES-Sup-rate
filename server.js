@@ -28,11 +28,11 @@ app.use(express.static('public')); // Para servir archivos estáticos
 
 // Conexión a MySQL
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    port: '3306',
-    user: 'THEGIGABOT',
-    password: 'THE-gigabot206..',
-    database: 'formulario1'
+    host: 'dpg-d0nmfsumcj7s73e5kmlg-a',
+    port: '5432'|| 3306,
+    user: 'icfes_sup_user',
+    password: 'Venhpu9Fr72vY5MkFQ3z4TIh6UfLamdS',
+    database: 'icfes_sup'
 });
 
 db.connect(err => {
@@ -266,6 +266,8 @@ app.get('/api/icfes/estadisticas', (req, res) => {
 
 // Obtener el puerto desde variable de entorno o usar 5000 por defecto
 const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+
 
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {  // Usar '0.0.0.0' para que escuche en todas las interfaces
