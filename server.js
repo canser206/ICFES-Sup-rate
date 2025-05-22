@@ -29,13 +29,13 @@ app.use(express.static('public')); // Para servir archivos estáticos
 const { Client } = require('pg');
 
 const db = new Client({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false
+    host: 'dpg-d0nmfsumcj7s73e5kmlg-a.oregon-postgres.render.com',
+    port: '5432'|| 3306,
+    user: 'icfes_sup_user',
+    password: 'Venhpu9Fr72vY5MkFQ3z4TIh6UfLamdS',
+    database: 'icfes_sup',
+ssl: {
+    rejectUnauthorized: false  // Necesario para Render
   }
 });
 
