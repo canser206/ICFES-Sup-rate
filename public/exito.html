@@ -30,10 +30,16 @@
             <div class="message">
                 <p>Tu cuenta ha sido creada correctamente</p>
                 <p class="welcome-text">Bienvenido a nuestra plataforma</p>
+                <p class="redirect-text" id="redirectText">Redirigiendo a la aplicación móvil...</p>
             </div>
             
             <div class="action-buttons">
-                <a href="/" class="button primary-button">
+                <button id="openAppBtn" class="button primary-button">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Abrir Aplicación</span>
+                </button>
+                
+                <a href="/" class="button secondary-button">
                     <i class="fas fa-home"></i>
                     <span>Volver al Inicio</span>
                 </a>
@@ -48,8 +54,72 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Initialize particles
+        function redirectToApp(userData) {
+            console.log('Intentando redirigir con datos:', userData);
+            
+            // Crear URL con parámetros reales
+            const appUrl = `icfes://login?success=true&token=${encodeURIComponent(userData.token)}&user=${encodeURIComponent(userData.username)}&email=${encodeURIComponent(userData.email)}&rol=${encodeURIComponent(userData.rol)}`;
+            
+            console.log('URL de redirección:', appUrl);
+            
+            // Intentar abrir la app
+            window.location.href = appUrl;
+            
+            // Fallback después de 2 segundos
+            setTimeout(() => {
+                document.getElementById('redirectText').textContent = 'Si la aplicación no se abrió automáticamente, usa el botón de abajo';
+                document.getElementById('openAppBtn').style.display = 'flex';
+            }, 2000);
+        }
+        
+        // Ejecutar cuando la página se carga
+        window.addEventListener('load', function() {
+            console.log('Página cargada, obteniendo datos del usuario...');
+            
+            // Obtener datos reales del localStorage
+            const storedUserData = localStorage.getItem('icfesUser');
+            
+            if (storedUserData) {
+                try {
+                    const userData = JSON.parse(storedUserData);
+                    console.log('Datos encontrados:', userData);
+                    
+                    // Actualizar el mensaje de bienvenida con el nombre real
+                    const welcomeText = document.querySelector('.welcome-text');
+                    if (welcomeText && userData.username) {
+                        welcomeText.textContent = `Bienvenido ${userData.username} a nuestra plataforma`;
+                    }
+                    
+                    // Intentar redirección automática después de mostrar la animación
+                    setTimeout(() => {
+                        redirectToApp(userData);
+                    }, 3000); // Esperar 3 segundos para que el usuario vea la página de éxito
+                    
+                } catch (error) {
+                    console.error('Error al procesar datos del usuario:', error);
+                    document.getElementById('redirectText').textContent = 'Error al procesar datos. Usa los botones de abajo.';
+                }
+            } else {
+                console.log('No se encontraron datos del usuario');
+                document.getElementById('redirectText').textContent = 'No se pudieron obtener los datos del registro.';
+                document.getElementById('openAppBtn').style.display = 'none';
+            }
+        });
+        
+        // Botón manual para abrir la app
         document.addEventListener('DOMContentLoaded', function() {
+            const openAppBtn = document.getElementById('openAppBtn');
+            if (openAppBtn) {
+                openAppBtn.addEventListener('click', function() {
+                    const storedUserData = localStorage.getItem('icfesUser');
+                    if (storedUserData) {
+                        const userData = JSON.parse(storedUserData);
+                        redirectToApp(userData);
+                    }
+                });
+            }
+            
+            // Initialize particles
             if (typeof particlesJS !== 'undefined') {
                 particlesJS('particles-js', {
                     particles: {

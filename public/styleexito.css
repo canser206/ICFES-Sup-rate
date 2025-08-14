@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
+.redirect-text {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+#openAppBtn {
+    display: none; /* Se mostrará solo si es necesario */
+}
+
 :root {
     --primary-color: #0066ff;
     --secondary-color: #6e00ff;

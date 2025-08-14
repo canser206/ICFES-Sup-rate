@@ -222,95 +222,104 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Form submission con manejo mejorado para ngrok
-    if (form) {
-        form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-            
-            // Button loading state
-            const submitBtn = document.querySelector(".submit-btn");
-            const btnText = submitBtn.querySelector(".btn-text");
-            const originalText = btnText.textContent;
-            const btnIcon = submitBtn.querySelector(".btn-icon");
-            
-            btnText.textContent = "Procesando...";
-            btnIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = "0.7";
-            
-            const userData = {
-                username: usernameInput.value,
-                email: emailInput.value,
-                password: passwordInput.value,
-                rol: document.getElementById("rol").value
-            };
-            
-            // Usar la URL base apropiada según si estamos en ngrok o local
-            const apiUrl = `${getBaseApiUrl()}/register`;
-            console.log(`📤 Enviando solicitud a: ${apiUrl}`);
-            
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(userData)
-                });
+if (form) {
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        
+        // Button loading state
+        const submitBtn = document.querySelector(".submit-btn");
+        const btnText = submitBtn.querySelector(".btn-text");
+        const originalText = btnText.textContent;
+        const btnIcon = submitBtn.querySelector(".btn-icon");
+        
+        btnText.textContent = "Procesando...";
+        btnIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.7";
+        
+        const userData = {
+            username: usernameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value,
+            rol: document.getElementById("rol").value
+        };
+        
+        // Usar la URL base apropiada según si estamos en ngrok o local
+        const apiUrl = `${getBaseApiUrl()}/register`;
+        console.log(`📤 Enviando solicitud a: ${apiUrl}`);
+        
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
 
-                const result = await response.json();
+            const result = await response.json();
+            
+            // Reset button state
+            btnText.textContent = originalText;
+            btnIcon.innerHTML = '<i class="fas fa-arrow-right"></i>';
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+            
+            // Manejar la respuesta
+            if (response.ok) {
+                showNotification(`¡Bienvenido a ICFES Supérate! Tu cuenta de ${result.rol} ha sido creada con éxito`, "success");
                 
-                // Reset button state
-                btnText.textContent = originalText;
-                btnIcon.innerHTML = '<i class="fas fa-arrow-right"></i>';
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-                
-                // Manejar la respuesta
-                if (response.ok) {
-                    showNotification(`¡Bienvenido a ICFES Supérate! Tu cuenta de ${result.rol} ha sido creada con éxito`, "success");
+                // Animación de éxito y redirección
+                document.querySelector(".container").classList.add("success-animation");
+                setTimeout(() => {
+                    // MODIFICADO: Guardar MÁS información para la redirección a la app
+                    localStorage.setItem('icfesUser', JSON.stringify({
+                        username: result.username,
+                        rol: result.rol,
+                        isNew: true,
+                        // NUEVO: Agregar token y email para la redirección
+                        token: result.token || generateTemporaryToken(), // Si el backend no devuelve token
+                        email: result.email || userData.email,
+                        registeredAt: new Date().toISOString()
+                    }));
                     
-                    // Animación de éxito y redirección
-                    document.querySelector(".container").classList.add("success-animation");
-                    setTimeout(() => {
-                        // Guardar información en localStorage para persistencia entre páginas
-                        localStorage.setItem('icfesUser', JSON.stringify({
-                            username: result.username,
-                            rol: result.rol,
-                            isNew: true
-                        }));
-                        
-                        window.location.href = "/exito.html";
-                    }, 1500);
-                } else {
-                    showNotification(result.message || "Error en el registro", "error");
-                    document.querySelector(".container").classList.add("shake");
-                    setTimeout(() => {
-                        document.querySelector(".container").classList.remove("shake");
-                    }, 600);
-                }
-            } catch (error) {
-                console.error("Error de red:", error);
-                
-                // Reset button state
-                btnText.textContent = originalText;
-                btnIcon.innerHTML = '<i class="fas fa-arrow-right"></i>';
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-                
-                // Mostrar mensaje específico para problemas de conectividad (común en ngrok)
-                if (!navigator.onLine) {
-                    showNotification("Sin conexión a internet. Verifica tu conexión y vuelve a intentarlo.", "error");
-                } else if (isNgrokOrRemote) {
-                    showNotification("Error de conexión con el servidor. Si estás usando ngrok, verifica que el túnel siga activo.", "error");
-                } else {
-                    showNotification("Hubo un problema con el registro. Intenta nuevamente más tarde.", "error");
-                }
-                
+                    window.location.href = "/exito.html";
+                }, 1500);
+            } else {
+                showNotification(result.message || "Error en el registro", "error");
                 document.querySelector(".container").classList.add("shake");
                 setTimeout(() => {
                     document.querySelector(".container").classList.remove("shake");
                 }, 600);
             }
-        });
-    }
+        } catch (error) {
+            console.error("Error de red:", error);
+            
+            // Reset button state
+            btnText.textContent = originalText;
+            btnIcon.innerHTML = '<i class="fas fa-arrow-right"></i>';
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+            
+            // Mostrar mensaje específico para problemas de conectividad (común en ngrok)
+            if (!navigator.onLine) {
+                showNotification("Sin conexión a internet. Verifica tu conexión y vuelve a intentarlo.", "error");
+            } else if (isNgrokOrRemote) {
+                showNotification("Error de conexión con el servidor. Si estás usando ngrok, verifica que el túnel siga activo.", "error");
+            } else {
+                showNotification("Hubo un problema con el registro. Intenta nuevamente más tarde.", "error");
+            }
+            
+            document.querySelector(".container").classList.add("shake");
+            setTimeout(() => {
+                document.querySelector(".container").classList.remove("shake");
+            }, 600);
+        }
+    });
+}
+
+// NUEVA FUNCIÓN: Para generar token temporal si el backend no lo devuelve
+function generateTemporaryToken() {
+    return 'temp_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+}
     
     // Inicialización para formularios de login
     const loginForm = document.getElementById("loginForm");
