@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 connectionBanner.className = 'connection-banner';
                 connectionBanner.innerHTML = `
                     <i class="fas fa-wifi"></i> 
-                    Conectado remotamente a ICFES Prep
+                    Conectado remotamente a ICFES Supérior
                     <span class="connection-status">✅ Servidor en línea</span>
                 `;
                 document.body.prepend(connectionBanner);

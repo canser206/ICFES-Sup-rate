@@ -1,6 +1,5 @@
 
 const express = require('express'); 
-const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -23,25 +22,37 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+// Configuración CORS específica para Firebase + Render
+app.use(cors({
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5000',
+        'icfes-superate.web.app',      // Tu dominio Firebase
+        'icfes-superate.firebaseapp.com'  // Dominio alternativo Firebase
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.static('public')); // Para servir archivos estáticos
 
-// Conexión a MySQL
-const db = mysql.createConnection({
-    host: '127.0.0.1',
-    port: '3306',
-    user: 'THEGIGABOT',
-    password: 'THE-gigabot206..',
-    database: 'formulario1'
+const { Client } = require('pg');
+
+const db = new Client({
+    host: 'dpg-d0nmfsumcj7s73e5kmlg-a.oregon-postgres.render.com',
+    port: '5432',
+    user: 'icfes_sup_user',
+    password: 'Venhpu9Fr72vY5MkFQ3z4TIh6UfLamdS',
+    database: 'icfes_sup',
+ssl: {
+    rejectUnauthorized: false  // Necesario para Render
+  }
 });
 
-db.connect(err => {
-    if (err) {
-        console.error('❌ Error conectando a la base de datos:', err);
-        return;
-    }
-    console.log('✅ Conectado a la base de datos');
-});
+db.connect()
+  .then(() => console.log('✅ Conectado a PostgreSQL'))
+  .catch(err => console.error('❌ Error conectando a PostgreSQL:', err));
 
 // Middleware para loguear todas las peticiones (ayuda al debuggear con ngrok)
 app.use((req, res, next) => {
@@ -114,7 +125,7 @@ app.post('/register', (req, res) => {
     }
     
     // Verificar si el usuario o email ya existen
-    db.query('SELECT * FROM usuarios WHERE username = ? OR email = ?', [username, email], (err, results) => {
+    db.query('SELECT * FROM usuarios WHERE username = $1 OR email = $2', [username, email], (err, results) => {
         if (err) {
             console.error("Error SQL al verificar duplicados:", err);
             return res.status(500).json({ message: "❌ Error al verificar usuario" });
@@ -134,7 +145,7 @@ app.post('/register', (req, res) => {
         }
         
         // Si pasó todas las validaciones, registrar usuario
-        const sql = 'INSERT INTO usuarios (username, email, password, rol) VALUES (?, ?, ?, ?)';
+        const sql = 'INSERT INTO usuarios (username, email, password, rol) VALUES ($1, $2, $3, $4)';
         db.query(sql, [username, email, password, rol], (err, result) => {
             if (err) {
                 console.error("Error SQL al insertar:", err);
@@ -160,7 +171,7 @@ app.post('/login', (req, res) => {
     }
     
     // Consulta que busca por nombre de usuario O por email
-    const sql = 'SELECT * FROM usuarios WHERE (username = ? OR email = ?) AND password = ?';
+    const sql = 'SELECT * FROM usuarios WHERE (username = $1 OR email = $1) AND password = $2';
     db.query(sql, [username, username, password], (err, result) => {
         if (err) {
             console.error("Error SQL en login:", err);
@@ -212,7 +223,7 @@ app.get('/api/usuarios', (req, res) => {
         const total = countResult[0].total;
         const totalPages = Math.ceil(total / limit);
         
-        db.query('SELECT id, username, email, rol, created_at FROM usuarios LIMIT ? OFFSET ?', 
+        db.query('SELECT id, username, email, rol, created_at FROM usuarios LIMIT $1 OFFSET $2', 
             [limit, offset], 
             (err, results) => {
                 if (err) {
@@ -266,6 +277,7 @@ app.get('/api/icfes/estadisticas', (req, res) => {
 
 // Obtener el puerto desde variable de entorno o usar 5000 por defecto
 const PORT = process.env.PORT || 5000;
+
 
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {  // Usar '0.0.0.0' para que escuche en todas las interfaces
