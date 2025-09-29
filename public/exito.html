@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Exitoso</title>
+    <link rel="stylesheet" href="/styleexito.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    
+    <div class="success-container">
+        <div class="confetti-container" id="confetti-container"></div>
+        
+        <div class="card">
+            <div class="success-icon">
+                <div class="success-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="success-rays"></div>
+            </div>
+            
+            <h1 class="title">¡Registro Exitoso!</h1>
+            
+            <div class="gif-container">
+                <img src="aprobado-por-chayanne-chayanne.gif" alt="Éxito" class="gif">
+            </div>
+            
+            <div class="message">
+                <p>Tu cuenta ha sido creada correctamente</p>
+                <p class="welcome-text">Bienvenido a nuestra plataforma</p>
+                <p class="redirect-text" id="redirectText">Redirigiendo a la aplicación móvil...</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="openAppBtn" class="button primary-button">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Abrir Aplicación</span>
+                </button>
+                
+                <a href="/" class="button secondary-button">
+                    <i class="fas fa-home"></i>
+                    <span>Volver al Inicio</span>
+                </a>
+                
+                <a href="Inicio-sesion.html" class="button secondary-button">
+                    <i class="fas fa-user"></i>
+                    <span>Iniciar sesión</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        function redirectToApp(userData) {
+            console.log('Intentando redirigir con datos:', userData);
+            
+            // Crear URL con parámetros reales
+            const appUrl = `icfes://login?success=true&token=${encodeURIComponent(userData.token)}&user=${encodeURIComponent(userData.username)}&email=${encodeURIComponent(userData.email)}&rol=${encodeURIComponent(userData.rol)}`;
+            
+            console.log('URL de redirección:', appUrl);
+            
+            // Intentar abrir la app
+            window.location.href = appUrl;
+            
+            // Fallback después de 2 segundos
+            setTimeout(() => {
+                document.getElementById('redirectText').textContent = 'Si la aplicación no se abrió automáticamente, usa el botón de abajo';
+                document.getElementById('openAppBtn').style.display = 'flex';
+            }, 2000);
+        }
+        
+        // Ejecutar cuando la página se carga
+        window.addEventListener('load', function() {
+            console.log('Página cargada, obteniendo datos del usuario...');
+            
+            // Obtener datos reales del localStorage
+            const storedUserData = localStorage.getItem('icfesUser');
+            
+            if (storedUserData) {
+                try {
+                    const userData = JSON.parse(storedUserData);
+                    console.log('Datos encontrados:', userData);
+                    
+                    // Actualizar el mensaje de bienvenida con el nombre real
+                    const welcomeText = document.querySelector('.welcome-text');
+                    if (welcomeText && userData.username) {
+                        welcomeText.textContent = `Bienvenido ${userData.username} a nuestra plataforma`;
+                    }
+                    
+                    // Intentar redirección automática después de mostrar la animación
+                    setTimeout(() => {
+                        redirectToApp(userData);
+                    }, 3000); // Esperar 3 segundos para que el usuario vea la página de éxito
+                    
+                } catch (error) {
+                    console.error('Error al procesar datos del usuario:', error);
+                    document.getElementById('redirectText').textContent = 'Error al procesar datos. Usa los botones de abajo.';
+                }
+            } else {
+                console.log('No se encontraron datos del usuario');
+                document.getElementById('redirectText').textContent = 'No se pudieron obtener los datos del registro.';
+                document.getElementById('openAppBtn').style.display = 'none';
+            }
+        });
+        
+        // Botón manual para abrir la app
+        document.addEventListener('DOMContentLoaded', function() {
+            const openAppBtn = document.getElementById('openAppBtn');
+            if (openAppBtn) {
+                openAppBtn.addEventListener('click', function() {
+                    const storedUserData = localStorage.getItem('icfesUser');
+                    if (storedUserData) {
+                        const userData = JSON.parse(storedUserData);
+                        redirectToApp(userData);
+                    }
+                });
+            }
+            
+            // Initialize particles
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: true },
+                        size: { value: 3, random: true },
+                        line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                        move: { enable: true, speed: 4, direction: "none", random: true, out_mode: "out" }
+                    }
+                });
+            }
+            
+            // Create confetti effect
+            const confetti = document.getElementById('confetti-container');
+            const colors = ['#00d9ff', '#6e00ff', '#0066ff', '#ff9500', '#ff2d55'];
+            
+            for (let i = 0; i < 150; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.classList.add('confetti-piece');
+                confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiPiece.style.left = `${Math.random() * 100}%`;
+                confettiPiece.style.width = `${Math.random() * 10 + 5}px`;
+                confettiPiece.style.height = `${Math.random() * 10 + 5}px`;
+                confettiPiece.style.animationDelay = `${Math.random() * 5}s`;
+                confettiPiece.style.animationDuration = `${Math.random() * 3 + 5}s`;
+                confetti.appendChild(confettiPiece);
+            }
+            
+            // Button hover effects
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('pulse');
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('pulse');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

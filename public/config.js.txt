@@ -1,0 +1,96 @@
+// Configuración de la aplicación ICFES
+const CONFIG = {
+    // URL de tu API en Render (cambiar por tu URL real)
+    API_BASE_URL: 'https://icfes-sup-rate.onrender.com',
+    
+    // Configuración de Firebase (necesitas obtener estos datos de tu consola Firebase)
+    FIREBASE_CONFIG: {
+        apiKey: "AIzaSyAKx96QxsgAuKAzqBQ41I1xta9v8FmOnls",
+    authDomain: "icfes-superate.firebaseapp.com",
+    projectId: "icfes-superate",
+    storageBucket: "icfes-superate.firebasestorage.app",
+    messagingSenderId: "122511015385",
+    appId: "1:122511015385:web:70b5a32062dd96c58eedc8",
+    measurementId: "G-C79587Z1LB"
+    },
+    
+    // Configuración de la aplicación
+    APP_CONFIG: {
+        name: "ICFES Supérate",
+        version: "1.0.0",
+        supportEmail: "contacto@icfessuperate.com",
+        phone: "3118442459"
+    }
+};
+
+// Función para hacer peticiones a la API
+async function apiRequest(endpoint, options = {}) {
+    const url = `${CONFIG.API_BASE_URL}${endpoint}`;
+    
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+    
+    const finalOptions = { ...defaultOptions, ...options };
+    
+    try {
+        const response = await fetch(url, finalOptions);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error en la petición');
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Error en API:', error);
+        throw error;
+    }
+}
+
+// Funciones de utilidad para el frontend
+const Utils = {
+    // Mostrar notificaciones
+    showNotification: function(message, type = 'info') {
+        // Implementar sistema de notificaciones
+        console.log(`[${type.toUpperCase()}] ${message}`);
+    },
+    
+    // Validar email
+    validateEmail: function(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    },
+    
+    // Formatear fecha
+    formatDate: function(date) {
+        return new Date(date).toLocaleDateString('es-CO');
+    },
+    
+    // Guardar en localStorage de forma segura
+    saveToStorage: function(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error('Error guardando en localStorage:', error);
+        }
+    },
+    
+    // Obtener de localStorage
+    getFromStorage: function(key) {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        } catch (error) {
+            console.error('Error obteniendo de localStorage:', error);
+            return null;
+        }
+    }
+};
+
+// Exportar para uso global
+window.CONFIG = CONFIG;
+window.apiRequest = apiRequest;
+window.Utils = Utils;

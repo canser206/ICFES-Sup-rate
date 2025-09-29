@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICFES Supérate | Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #3949ab;
+            --secondary-color: #1e88e5;
+            --accent-color: #00b0ff;
+            --success-color: #00c853;
+            --warning-color: #ffc400;
+            --error-color: #f44336;
+            --text-color: #37474f;
+            --text-light: #ffffff;
+            --background-light: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/256520/pexels-photo-256520.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Overlay para el efecto de educación */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.03)">ICFES</text></svg>');
+            background-repeat: repeat;
+            z-index: 1;
+        }
+        
+        .login-container {
+            position: relative;
+            z-index: 2;
+            max-width: 450px;
+            width: 90%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .login-logo {
+            margin-bottom: 25px;
+        }
+        
+        .login-logo img {
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 45px;
+            transform: translateY(-50%);
+            font-size: 1em;
+            color: #90a4ae;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: 0;
+            left: 15px;
+            font-size: 0.8em;
+            padding: 0 5px;
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #cfd8dc;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+        
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.2);
+            outline: none;
+        }
+        
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #90a4ae;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+        
+        .input-group input:focus ~ .input-icon {
+            color: var(--primary-color);
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .remember-me-inner {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            accent-color: var(--primary-color);
+        }
+        
+        .remember-me label {
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+        
+        .forgot-password {
+            font-size: 0.9em;
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .forgot-password:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .login-button {
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(30deg);
+            transition: transform 0.3s ease-out;
+            opacity: 0;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-button:hover::after {
+            transform: rotate(30deg) translate(150%, -100%);
+            opacity: 1;
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-button i {
+            font-size: 1.2em;
+        }
+        
+        .form-footer {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-footer p {
+            font-size: 0.95em;
+            color: var(--text-color);
+        }
+        
+        .form-footer a {
+            color: var(--secondary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .form-footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .divider {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid #cfd8dc;
+            line-height: 0.1em;
+            margin: 25px 0;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            color: #90a4ae;
+            font-size: 0.9em;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #cfd8dc;
+            background-color: white;
+            color: #616161;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .facebook:hover {
+            background-color: #1877f2;
+            color: white;
+            border-color: #1877f2;
+        }
+        
+        .google:hover {
+            background-color: #db4437;
+            color: white;
+            border-color: #db4437;
+        }
+        
+        .twitter:hover {
+            background-color: #1da1f2;
+            color: white;
+            border-color: #1da1f2;
+        }
+        
+        .icfes-features {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .feature i {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .feature span {
+            font-size: 0.85em;
+            color: var(--text-color);
+        }
+        
+        .error-message {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 15px;
+            color: #616161;
+            font-size: 0.85em;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Estilo para el banner ICFES */
+        .icfes-banner {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 576px) {
+            .login-container {
+                width: 95%;
+                padding: 30px 20px;
+            }
+            
+            .icfes-features {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .tagline {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="logo.png" alt="ICFES Supérate Logo">
+            <h1>ICFES Supérate</h1>
+            <p class="tagline">Prepárate y alcanza tu máximo potencial</p>
+        </div>
+        
+        <div class="icfes-banner">
+            <i class="fas fa-graduation-cap"></i>
+            <span>¡Tu éxito en el ICFES comienza aquí!</span>
+        </div>
+        
+        <div id="error-message" class="error-message">
+            Nombre de usuario o contraseña incorrectos. Por favor, intenta nuevamente.
+        </div>
+        
+        <form id="login-form">
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="text" id="username" name="username" required>
+                <label for="username">Usuario o Email</label>
+            </div>
+            
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="password" name="password" required>
+                <label for="password">Contraseña</label>
+            </div>
+            
+            <div class="remember-me">
+                <div class="remember-me-inner">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Recordarme</label>
+                </div>
+                <a href="/Recuperar contraseña.html" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            </div>
+            
+            <button type="submit" class="login-button">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Iniciar Sesión</span>
+            </button>
+        </form>
+        
+        <div class="divider"><span>o continúa con</span></div>
+        
+        <div class="social-login">
+            <button class="social-button google">
+                <i class="fab fa-google"></i>
+                </button>
+        </div>
+        
+        <div class="form-footer">
+            <p>¿No tienes una cuenta? <a href="/Formulario.html">Regístrate ahora</a></p>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span>Conexión segura</span>
+            </div>
+        </div>
+        
+        <div class="icfes-features">
+            <div class="feature">
+                <i class="fas fa-book"></i>
+                <span>Guías completas</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-tasks"></i>
+                <span>Simulacros</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-line"></i>
+                <span>Seguimiento</span>
+            </div>
+        </div>
+    </div> 
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginForm = document.getElementById("login-form");
+            const errorMessage = document.getElementById("error-message");
+            
+            // Enfoque automático al primer campo vacío
+            const focusFirstEmptyField = () => {
+                const fields = [
+                    document.getElementById("username"),
+                    document.getElementById("password")
+                ];
+                
+                for (const field of fields) {
+                    if (!field.value) {
+                        field.focus();
+                        break;
+                    }
+                }
+            };
+            
+            // Iniciar con enfoque
+            setTimeout(focusFirstEmptyField, 500);
+            
+            // Detectar si estamos usando ngrok
+            const isNgrok = window.location.hostname.includes('ngrok');
+            
+            // Función para obtener la URL base
+            const getBaseUrl = () => {
+                return window.location.origin;
+            };
+            
+            loginForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const remember = document.getElementById("remember").checked;
+                
+                // Cambiar botón a estado de carga
+                const loginButton = document.querySelector(".login-button");
+                const buttonText = loginButton.querySelector("span").innerText;
+                loginButton.querySelector("span").innerText = "Procesando...";
+                loginButton.disabled = true;
+                loginButton.style.opacity = "0.7";
+                
+                try {
+                    // Realizar petición de login al servidor
+                    const response = await fetch(`${getBaseUrl()}/login`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ username, password, remember })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        // Guardar información del usuario si "recordarme" está marcado
+                        if (remember) {
+                            localStorage.setItem("user", JSON.stringify(data.user));
+                        } else {
+                            sessionStorage.setItem("user", JSON.stringify(data.user));
+                        }
+                        
+                        // Mostrar mensaje de éxito antes de redirigir
+                        errorMessage.innerText = "¡Inicio de sesión exitoso! Redirigiendo...";
+                        errorMessage.style.backgroundColor = "rgba(0, 200, 83, 0.1)";
+                        errorMessage.style.color = "#00c853";
+                        errorMessage.style.display = "block";
+                        
+                        // Redirigir según el rol del usuario
+                        setTimeout(() => {
+                            if (data.user.rol === "administrador") {
+                                window.location.href = `${getBaseUrl()}/usuarios`;
+                            } else {
+                                window.location.href = `${getBaseUrl()}/dashboard-estudiante.html`;
+                            }
+                        }, 1500);
+                    } else {
+                        // Mostrar mensaje de error
+                        errorMessage.innerText = data.message || "Nombre de usuario o contraseña incorrectos";
+                        errorMessage.style.display = "block";
+                        errorMessage.style.backgroundColor = "rgba(244, 67, 54, 0.1)";
+                        errorMessage.style.color = "#f44336";
+                        
+                        // Ocultar mensaje de error después de un tiempo
+                        setTimeout(() => {
+                            errorMessage.style.display = "none";
+                        }, 4000);
+                        
+                        // Restablecer botón
+                        loginButton.querySelector("span").innerText = buttonText;
+                        loginButton.disabled = false;
+                        loginButton.style.opacity = "1";
+                    }
+                } catch (error) {
+                    console.error("Error al iniciar sesión:", error);
+                    
+                    // Mostrar mensaje de error de conexión
+                    errorMessage.innerText = "Error de conexión. Por favor, intenta más tarde.";
+                    errorMessage.style.display = "block";
+                    
+                    // Restablecer botón
+                    loginButton.querySelector("span").innerText = buttonText;
+                    loginButton.disabled = false;
+                    loginButton.style.opacity = "1";
+                }
+            });
+            
+            // Añadir efecto a los campos de entrada
+            const inputs = document.querySelectorAll("input");
+            inputs.forEach(input => {
+                // Si ya tiene valor, mover el label arriba
+                if (input.value !== "") {
+                    input.parentElement.querySelector("label").style.top = "0";
+                    input.parentElement.querySelector("label").style.left = "15px";
+                    input.parentElement.querySelector("label").style.fontSize = "0.8em";
+                    input.parentElement.querySelector("label").style.backgroundColor = "white";
+                    input.parentElement.querySelector("label").style.color = "#3949ab";
+                    input.parentElement.querySelector("label").style.padding = "0 5px";
+                }
+                
+                // Añadir efecto de animación al hacer clic en cualquier lugar del grupo
+                input.parentElement.addEventListener("click", () => {
+                    input.focus();
+                });
+            });
+        });
+    </script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+  // ✅ CONFIGURACIÓN DE FIREBASE - Ya la tienes correcta
+  const firebaseConfig = {
+    apiKey: "AIzaSyAKx96QxsgAuKAzqBQ41I1xta9v8FmOnls",
+    authDomain: "icfes-superate.firebaseapp.com",
+    projectId: "icfes-superate",
+    storageBucket: "icfes-superate.firebasestorage.app",
+    messagingSenderId: "122511015385",
+    appId: "1:122511015385:web:70b5a32062dd96c58eedc8",
+    measurementId: "G-C79587Z1LB"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.querySelector('.google')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const token = await user.getIdToken();
+
+        const response = await fetch("https://icfes-sup-rate.onrender.com/api/auth/google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token })
+        });
+
+        const data = await response.json();
+        console.log("✅ Respuesta del backend:", data);
+
+        // Redirige si todo está bien
+        if (response.ok) {
+          window.location.href = "/dashboard.html";
+        } else {
+          alert("Error de autenticación: " + data.error);
+        }
+
+      } catch (error) {
+        console.error("❌ Error de autenticación con Google:", error);
+        alert("Error con Google Sign-In: " + error.message);
+      }
+    });
+  // Configura persistencia para mantener la sesión activa
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log("Persistencia configurada exitosamente");
+    })
+    .catch((error) => {
+      console.error("Error al configurar la persistencia:", error);
+    });
+
+  // Error message element reference
+  const errorMessageElement = document.getElementById("error-message");
+  
+  // Función para mostrar mensajes de error/éxito
+  const showMessage = (message, isError = true) => {
+    errorMessageElement.innerText = message;
+    errorMessageElement.style.display = "block";
+    
+    if (isError) {
+      errorMessageElement.style.backgroundColor = "rgba(244, 67, 54, 0.1)";
+      errorMessageElement.style.color = "#f44336";
+    } else {
+      errorMessageElement.style.backgroundColor = "rgba(0, 200, 83, 0.1)";
+      errorMessageElement.style.color = "#00c853";
+    }
+    
+    // Ocultar mensaje después de un tiempo
+    setTimeout(() => {
+      errorMessageElement.style.display = "none";
+    }, 4000);
+  };
+  
+  // Función para guardar información del usuario en Firestore
+  const saveUserToFirestore = async (user) => {
+    try {
+      const userRef = doc(db, "usuarios", user.uid);
+      
+      // Verifica si ya existe el documento del usuario
+      const userDoc = await getDoc(userRef);
+      
+      if (!userDoc.exists()) {
+        // Si es primera vez que inicia sesión, crea documento con datos básicos
+        await setDoc(userRef, {
+          nombre: user.displayName || "",
+          email: user.email || "",
+          foto: user.photoURL || "",
+          rol: "estudiante", // Por defecto asignamos rol de estudiante
+          fechaRegistro: new Date(),
+          ultimoAcceso: new Date()
+        });
+      } else {
+        // Si ya existe, solo actualiza la fecha de último acceso
+        await setDoc(userRef, {
+          ultimoAcceso: new Date()
+        }, { merge: true });
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Error al guardar usuario en Firestore:", error);
+      return false;
+    }
+  };
+  
+  // Función para dirigir al usuario a la página correcta según su rol
+  const redirectUserBasedOnRole = async (user) => {
+    try {
+      // Verificar si existe información adicional en Firestore
+      const userRef = doc(db, "usuarios", user.uid);
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        
+        // Guardar información de usuario en localStorage
+        const remember = document.getElementById("remember")?.checked || false;
+        const userInfo = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          rol: userData.rol || "estudiante"
+        };
+        
+        if (remember) {
+          localStorage.setItem("user", JSON.stringify(userInfo));
+        } else {
+          sessionStorage.setItem("user", JSON.stringify(userInfo));
+        }
+        
+        // Mostrar mensaje antes de redirección
+        showMessage("¡Inicio de sesión exitoso! Redirigiendo...", false);
+        
+        // Redireccionar según el rol
+        setTimeout(() => {
+          if (userData.rol === "administrador") {
+            window.location.href = `${window.location.origin}/usuarios`;
+          } else {
+            window.location.href = `${window.location.origin}/dashboard-estudiante.html`;
+          }
+        }, 1500);
+      } else {
+        // Si no existe en Firestore, probablemente redirigir a completar perfil
+        showMessage("¡Bienvenido! Por favor completa tu perfil.", false);
+        setTimeout(() => {
+          window.location.href = `${window.location.origin}/completar-perfil.html`;
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Error al redireccionar usuario:", error);
+      showMessage("Error al procesar tu información. Intenta de nuevo más tarde.");
+    }
+  };
+
+  // 🔵 AUTENTICACIÓN CON GOOGLE
+const googleProvider = new GoogleAuthProvider();
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
+
+document.querySelector('.google')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  const googleButton = document.querySelector('.google');
+  googleButton.disabled = true;
+  googleButton.style.opacity = "0.7";
+
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    console.log("Usuario autenticado:", user);
+
+    // 🔐 (OPCIONAL) Enviar token al backend
+    const idToken = await user.getIdToken();
+    await fetch("https://icfes-sup-rate.onrender.com/api/auth/google", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ token: idToken })
+    });
+    
+await pool.query(
+  'INSERT INTO usuarios (uid, email, nombre) VALUES ($1, $2, $3) ON CONFLICT (uid) DO NOTHING',
+  [uid, email, name]
+);
+
+    // Redirigir (o puedes usar función propia)
+    window.location.href = "/dashboard.html";
+
+  } catch (error) {
+    console.error("Error de autenticación con Google:", error);
+    let msg = "Error al iniciar sesión con Google.";
+    if (error.code === 'auth/popup-closed-by-user') {
+      msg = "Cerraste la ventana de Google sin iniciar sesión.";
+    } else if (error.code === 'auth/popup-blocked') {
+      msg = "Tu navegador bloqueó la ventana emergente.";
+    }
+    alert(msg); // Puedes usar tu propio showMessage()
+
+  } finally {
+    googleButton.disabled = false;
+    googleButton.style.opacity = "1";
+  }
+});
+
+// ✅ VERIFICAR SI YA ESTÁ AUTENTICADO
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Ya autenticado:", user.email);
+    // window.location.href = "/dashboard.html"; // Si quieres auto-redirigir
+  } else {
+    console.log("Usuario no autenticado");
+  }
+});
+
+  // 🔵 FACEBOOK LOGIN (mantener si se utilizará en el futuro)
+  const facebookProvider = new FacebookAuthProvider();
+  document.querySelector('.facebook')?.addEventListener('click', async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      
+      // Proceso similar al de Google
+      await saveUserToFirestore(user);
+      await redirectUserBasedOnRole(user);
+      
+    } catch (error) {
+      if (error.code === 'auth/popup-closed-by-user') {
+        showMessage("Cerraste la ventana de Facebook sin iniciar sesión.");
+      } else {
+        console.error("Facebook login error:", error.code);
+        showMessage("Facebook login fallido: " + error.message);
+      }
+    }
+  }); 
+  
+</script>
+</body>
+</html>

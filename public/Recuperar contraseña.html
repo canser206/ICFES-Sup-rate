@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - ICFES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .icfes-logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #4facfe;
+            font-size: 20px;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #4facfe;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+
+        .code-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .code-input input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #1565c0;
+        }
+
+        .info-box i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icfes-logo">ICFES</div>
+            <h1>Recuperar Contraseña</h1>
+            <p>Te ayudamos a recuperar el acceso a tu cuenta</p>
+        </div>
+
+        <div class="form-container">
+            <!-- Paso 1: Solicitar email -->
+            <div class="step active" id="step1">
+                <div class="info-box">
+                    <strong>📧 Ingresa tu correo electrónico</strong><br>
+                    Te enviaremos un código de verificación para restablecer tu contraseña.
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required 
+                               placeholder="ejemplo@correo.com">
+                    </div>
+                    <button type="submit" class="btn" id="sendCodeBtn">
+                        Enviar Código de Verificación
+                    </button>
+                </form>
+            </div>
+
+            <!-- Paso 2: Verificar código -->
+            <div class="step" id="step2">
+                <div class="info-box">
+                    <strong>🔐 Código de Verificación</strong><br>
+                    Hemos enviado un código de 6 dígitos a tu correo electrónico.
+                </div>
+
+                <div id="code-error" class="error-message"></div>
+
+                <form id="codeForm">
+                    <div class="form-group">
+                        <label>Ingresa el código de verificación:</label>
+                        <div class="code-input">
+                            <input type="text" maxlength="1" id="code1" required>
+                            <input type="text" maxlength="1" id="code2" required>
+                            <input type="text" maxlength="1" id="code3" required>
+                            <input type="text" maxlength="1" id="code4" required>
+                            <input type="text" maxlength="1" id="code5" required>
+                            <input type="text" maxlength="1" id="code6" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" id="verifyCodeBtn">
+                        Verificar Código
+                    </button>
+                </form>
+
+                <div class="back-link">
+                    <a href="#" id="resendCode">¿No recibiste el código? Reenviar</a>
+                </div>
+            </div>
+
+            <!-- Paso 3: Nueva contraseña -->
+            <div class="step" id="step3">
+                <div class="info-box">
+                    <strong>🔒 Nueva Contraseña</strong><br>
+                    Crea una contraseña segura para tu cuenta.
+                </div>
+
+                <div id="password-error" class="error-message"></div>
+                <div id="password-success" class="success-message"></div>
+
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="newPassword">Nueva Contraseña</label>
+                        <input type="password" id="newPassword" name="newPassword" required 
+                               placeholder="Mínimo 8 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Contraseña</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required 
+                               placeholder="Repite la contraseña">
+                    </div>
+                    <button type="submit" class="btn" id="resetPasswordBtn">
+                        Cambiar Contraseña
+                    </button>
+                </form>
+            </div>
+
+            <div class="back-link">
+                <a href="/Inicio-sesion.html">← Volver al Inicio de Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        let userEmail = '';
+        let verificationCode = '';
+
+        // Referencias a elementos
+        const steps = document.querySelectorAll('.step');
+        const emailForm = document.getElementById('emailForm');
+        const codeForm = document.getElementById('codeForm');
+        const passwordForm = document.getElementById('passwordForm');
+
+        // Función para mostrar un paso específico
+        function showStep(stepNumber) {
+            steps.forEach(step => step.classList.remove('active'));
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            currentStep = stepNumber;
+        }
+
+        // Función para mostrar mensajes
+        function showMessage(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+
+        // Paso 1: Enviar código al email
+        emailForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const sendBtn = document.getElementById('sendCodeBtn');
+            
+            // Validar email
+            if (!email || !email.includes('@')) {
+                showMessage('error-message', 'Por favor ingresa un correo electrónico válido.', true);
+                return;
+            }
+            
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Enviando...';
+            
+            // Simular envío de código (aquí integrarías con tu backend)
+            setTimeout(() => {
+                userEmail = email;
+                verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                console.log('Código generado:', verificationCode); // Para testing
+                
+                showMessage('success-message', 'Código enviado exitosamente. Revisa tu correo electrónico.');
+                
+                setTimeout(() => {
+                    showStep(2);
+                }, 1500);
+                
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Enviar Código de Verificación';
+            }, 2000);
+        });
+
+        // Manejo de inputs del código
+        const codeInputs = document.querySelectorAll('.code-input input');
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                if (e.target.value.length === 1 && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Paso 2: Verificar código
+        codeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const enteredCode = Array.from(codeInputs).map(input => input.value).join('');
+            
+            if (enteredCode.length !== 6) {
+                showMessage('code-error', 'Por favor ingresa el código completo de 6 dígitos.', true);
+                return;
+            }
+            
+            // Verificar código (en producción, verificar con el backend)
+            if (enteredCode === verificationCode) {
+                showStep(3);
+            } else {
+                showMessage('code-error', 'Código incorrecto. Por favor verifica e intenta nuevamente.', true);
+                codeInputs.forEach(input => input.value = '');
+                codeInputs[0].focus();
+            }
+        });
+
+        // Reenviar código
+        document.getElementById('resendCode').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Generar nuevo código
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log('Nuevo código:', verificationCode);
+            
+            // Limpiar inputs
+            codeInputs.forEach(input => input.value = '');
+            codeInputs[0].focus();
+            
+            alert('Nuevo código enviado a tu correo electrónico.');
+        });
+
+        // Paso 3: Cambiar contraseña
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const resetBtn = document.getElementById('resetPasswordBtn');
+            
+            // Validaciones
+            if (newPassword.length < 8) {
+                showMessage('password-error', 'La contraseña debe tener al menos 8 caracteres.', true);
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('password-error', 'Las contraseñas no coinciden.', true);
+                return;
+            }
+            
+            resetBtn.disabled = true;
+            resetBtn.textContent = 'Cambiando...';
+            
+            // Simular cambio de contraseña
+            setTimeout(() => {
+                showMessage('password-success', '¡Contraseña cambiada exitosamente! Redirigiendo al inicio de sesión...');
+                
+                setTimeout(() => {
+                    // Redirigir al login (cambiar por tu URL de login)
+                    window.location.href = 'login.html';
+                }, 2000);
+                
+                resetBtn.disabled = false;
+                resetBtn.textContent = 'Cambiar Contraseña';
+            }, 2000);
+        });
+
+        // Auto-focus en el primer input al cargar
+        document.getElementById('email').focus();
+    </script>
+</body>
+</html>
